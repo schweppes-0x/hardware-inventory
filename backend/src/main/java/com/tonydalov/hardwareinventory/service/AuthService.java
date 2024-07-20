@@ -29,7 +29,7 @@ public class AuthService implements UserDetailsService {
         }
 
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(data.username(), data.fullname(), encryptedPassword, UserRole.USER);
+        User newUser = new User(data.username(), data.fullName(), encryptedPassword, UserRole.USER);
         repository.save(newUser);
     }
 

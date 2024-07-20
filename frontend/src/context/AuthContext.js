@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('accessToken') || '');
     const navigate = useNavigate();
+    const toRemoveOnLogout = ["accessToken", "hardwareData"];
 
     const login = (newToken) => {
         localStorage.setItem('accessToken', newToken);
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem('accessToken');
+        toRemoveOnLogout.forEach(data => localStorage.removeItem(data));
         setToken('');
         navigate('/login');
     };
