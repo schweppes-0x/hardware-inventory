@@ -8,7 +8,6 @@ function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Initialize useNavigate hook
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -16,7 +15,6 @@ function Login() {
         setError('');
         setLoading(true);
 
-        // Basic validation to check if both fields are filled
         if (!username || !password) {
             setError('Both fields are required.');
             setLoading(false);
@@ -29,14 +27,11 @@ function Login() {
                 password
             });
 
-            // Store the JWT token in localStorage
             localStorage.setItem('accessToken', response.data.accessToken);
 
-            // Redirect to /hardware on successful login
             navigate('/hardware');
 
         } catch (error) {
-            // Handle error response
             if (error.response && error.response.data) {
                 setError(error.response.data.message || 'An error occurred.');
             } else {

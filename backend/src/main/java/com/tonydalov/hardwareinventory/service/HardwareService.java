@@ -23,8 +23,11 @@ public class HardwareService {
     }
     
     public Optional<Hardware> create(HardwareDto hardware) {
-        Hardware toCreate = hardware.toEntity();
-        return Optional.of(hardwareRepository.save(toCreate));
+        return create(hardware.toEntity());
+    }
+
+    public Optional<Hardware> create(Hardware hardware){
+        return Optional.of(hardwareRepository.save(hardware));
     }
 
     public void delete(Long id) {

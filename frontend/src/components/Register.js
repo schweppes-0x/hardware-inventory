@@ -12,23 +12,19 @@ function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Basic validation to check if all fields are filled
         if (!fullName || !username || !password || !repeatPassword) {
             setError('All fields are required.');
             return;
         }
 
-        // Check if passwords match
         if (password !== repeatPassword) {
             setError('Passwords do not match.');
             return;
         }
 
-        // Clear error if validation passes
         setError('');
 
         try {
-            // Send POST request to the backend
             const response = await fetch('http://localhost:8081/api/v1/auth/signup', {
                 method: 'POST',
                 headers: {
@@ -37,17 +33,13 @@ function Register() {
                 body: JSON.stringify({ fullName, username, password }),
             });
 
-            // Check if the response is OK
             if (response.ok) {
-                // If successful, redirect to the login page
                 navigate('/login');
             } else {
-                // Handle errors (e.g., display a message from the backend)
                 const errorData = await response.json();
                 setError(errorData.message || 'Registration failed.');
             }
         } catch (err) {
-            // Handle network errors
             setError('An error occurred. Please try again.');
         }
     };
