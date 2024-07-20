@@ -1,6 +1,7 @@
 package com.tonydalov.hardwareinventory.service;
 
 import com.tonydalov.hardwareinventory.model.User;
+import com.tonydalov.hardwareinventory.model.UserRole;
 import com.tonydalov.hardwareinventory.repository.UserRepository;
 import com.tonydalov.hardwareinventory.rest.auth.SignUpDto;
 import com.tonydalov.hardwareinventory.security.TokenProvider;
@@ -28,7 +29,7 @@ public class AuthService implements UserDetailsService {
         }
 
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(data.username(), data.fullname(), encryptedPassword, data.role());
+        User newUser = new User(data.username(), data.fullname(), encryptedPassword, UserRole.USER);
         repository.save(newUser);
     }
 

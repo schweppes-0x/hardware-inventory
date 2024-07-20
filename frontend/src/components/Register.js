@@ -1,28 +1,55 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');  // State for repeating the password
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         // Basic validation to check if all fields are filled
-        if (!fullName || !username || !password) {
+        if (!fullName || !username || !password || !repeatPassword) {
             setError('All fields are required.');
+            return;
+        }
+
+        // Check if passwords match
+        if (password !== repeatPassword) {
+            setError('Passwords do not match.');
             return;
         }
 
         // Clear error if validation passes
         setError('');
 
-        // Add your registration logic here
-        console.log('Full Name:', fullName);
-        console.log('Username:', username);
-        console.log('Password:', password);
+        try {
+            // Send POST request to the backend
+            const response = await fetch('http://localhost:8081/api/v1/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fullName, username, password }),
+            });
+
+            // Check if the response is OK
+            if (response.ok) {
+                // If successful, redirect to the login page
+                navigate('/login');
+            } else {
+                // Handle errors (e.g., display a message from the backend)
+                const errorData = await response.json();
+                setError(errorData.message || 'Registration failed.');
+            }
+        } catch (err) {
+            // Handle network errors
+            setError('An error occurred. Please try again.');
+        }
     };
 
     return (
@@ -56,6 +83,14 @@ function Register() {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="block w-full mb-4 p-2 border border-gray-300 rounded"
+                        required
+                    />
+                    <label className="block mb-2 text-sm font-medium">Repeat Password</label>
+                    <input
+                        type="password"
+                        value={repeatPassword}
+                        onChange={(e) => setRepeatPassword(e.target.value)}
                         className="block w-full mb-4 p-2 border border-gray-300 rounded"
                         required
                     />
